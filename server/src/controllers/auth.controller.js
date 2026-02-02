@@ -210,6 +210,37 @@ exports.registerTeacher = async (req, res) => {
       });
     }
 
+    // Get location data if provided
+    let locationData = {};
+    if (req.body.city || req.body.state) {
+      const { normalizeLocation, getCoordinates } = require('../services/geocoding.service');
+      try {
+        if (req.body.city && req.body.state) {
+          locationData = normalizeLocation({ 
+            state: req.body.state, 
+            city: req.body.city, 
+            pincode: req.body.pincode 
+          });
+        } else if (organization.location) {
+          // Use organization's location as fallback
+          locationData = {
+            city: organization.location.city,
+            latitude: organization.location.latitude,
+            longitude: organization.location.longitude
+          };
+        }
+      } catch (error) {
+        console.warn('Geocoding error for teacher:', error.message);
+      }
+    } else if (organization.location) {
+      // Use organization's location as fallback
+      locationData = {
+        city: organization.location.city,
+        latitude: organization.location.latitude,
+        longitude: organization.location.longitude
+      };
+    }
+
     // Create teacher
     const teacher = await Teacher.create({
       organization: organization._id,
@@ -221,6 +252,9 @@ exports.registerTeacher = async (req, res) => {
         grade,
         section: section || 'A'
       },
+      city: locationData.city || req.body.city,
+      latitude: locationData.latitude || req.body.latitude,
+      longitude: locationData.longitude || req.body.longitude,
       ...req.body
     });
 
@@ -306,10 +340,6 @@ exports.loginTeacher = async (req, res) => {
   }
 };
 
-// =============================================
-// STUDENT CONTROLLERS
-// =============================================
-
 /**
  * Register Student
  * POST /api/auth/student/register
@@ -366,6 +396,37 @@ exports.registerStudent = async (req, res) => {
       'classTeacher.section': section || 'A'
     });
 
+    // Get location data if provided
+    let locationData = {};
+    if (req.body.city || req.body.state) {
+      const { normalizeLocation } = require('../services/geocoding.service');
+      try {
+        if (req.body.city && req.body.state) {
+          locationData = normalizeLocation({ 
+            state: req.body.state, 
+            city: req.body.city, 
+            pincode: req.body.pincode 
+          });
+        } else if (organization.location) {
+          // Use organization's location as fallback
+          locationData = {
+            city: organization.location.city,
+            latitude: organization.location.latitude,
+            longitude: organization.location.longitude
+          };
+        }
+      } catch (error) {
+        console.warn('Geocoding error for student:', error.message);
+      }
+    } else if (organization.location) {
+      // Use organization's location as fallback
+      locationData = {
+        city: organization.location.city,
+        latitude: organization.location.latitude,
+        longitude: organization.location.longitude
+      };
+    }
+
     // Create student
     const student = await Student.create({
       organization: organization._id,
@@ -378,6 +439,9 @@ exports.registerStudent = async (req, res) => {
         section: section || 'A'
       },
       rollNumber,
+      city: locationData.city || req.body.city,
+      latitude: locationData.latitude || req.body.latitude,
+      longitude: locationData.longitude || req.body.longitude,
       ...req.body
     });
 
@@ -464,9 +528,7 @@ exports.loginStudent = async (req, res) => {
   }
 };
 
-// =============================================
-// EMAIL VERIFICATION
-// =============================================
+
 
 /**
  * Verify Email

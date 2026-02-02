@@ -71,6 +71,22 @@ const studentSchema = new mongoose.Schema(
     parentPhone: String,
     parentEmail: String,
 
+    // Location fields for disaster alerts
+    city: {
+      type: String,
+      trim: true,
+    },
+    latitude: {
+      type: Number,
+      min: -90,
+      max: 90,
+    },
+    longitude: {
+      type: Number,
+      min: -180,
+      max: 180,
+    },
+
     profilePicture: String,
 
     progress: {
@@ -126,6 +142,10 @@ studentSchema.index(
 );
 
 studentSchema.index({ organization: 1, classTeacher: 1 });
+
+// Geospatial index for location-based queries
+studentSchema.index({ latitude: 1, longitude: 1 });
+studentSchema.index({ city: 1 });
 
 
 studentSchema.pre('save', async function () {

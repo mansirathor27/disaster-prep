@@ -64,6 +64,22 @@ const teacherSchema = new mongoose.Schema(
       trim: true,
     },
 
+    // Location fields for disaster alerts
+    city: {
+      type: String,
+      trim: true,
+    },
+    latitude: {
+      type: Number,
+      min: -90,
+      max: 90,
+    },
+    longitude: {
+      type: Number,
+      min: -180,
+      max: 180,
+    },
+
     dateOfJoining: {
       type: Date,
       default: Date.now,
@@ -103,6 +119,10 @@ teacherSchema.index({
   'classTeacher.grade': 1,
   'classTeacher.section': 1,
 });
+
+// Geospatial index for location-based queries
+teacherSchema.index({ latitude: 1, longitude: 1 });
+teacherSchema.index({ city: 1 });
 
 
 teacherSchema.pre('save', async function () {

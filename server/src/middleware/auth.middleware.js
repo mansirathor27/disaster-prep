@@ -1,16 +1,11 @@
-/**
- * Authentication Middleware
- * JWT token verification and role-based access control
- */
+
 
 const jwt = require('jsonwebtoken');
 const Organization = require('../models/Organization.model');
 const Teacher = require('../models/Teacher.model');
 const Student = require('../models/Student.model');
 
-/**
- * Protect routes - verify JWT token
- */
+
 exports.protect = async (req, res, next) => {
   try {
     let token;
