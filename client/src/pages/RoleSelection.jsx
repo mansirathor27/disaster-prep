@@ -48,7 +48,7 @@ const RoleSelection = () => {
   ];
 
   const handleRoleSelect = (roleId) => {
-    navigate(`/auth/${roleId}`);
+    navigate(`/auth/${roleId}/login`);
   };
 
   useEffect(() => {

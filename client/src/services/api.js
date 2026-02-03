@@ -8,6 +8,29 @@ const api = axios.create({
   },
 });
 
+// Add token to requests if available
+const token = localStorage.getItem('token');
+if (token) {
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('token');
+      delete api.defaults.headers.common['Authorization'];
+      // Redirect to login if not already there
+      if (window.location.pathname !== '/auth') {
+        window.location.href = '/auth';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Location API
 export const getDisastersByLocation = async (locationData) => {
   const response = await api.post('/location/disasters', locationData);
