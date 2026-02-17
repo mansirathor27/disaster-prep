@@ -42,25 +42,52 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
 
-    try {
-      const response = await config.loginFn(formData.email, formData.password);
+  //   try {
+  //     const response = await config.loginFn(formData.email, formData.password);
       
-      if (response.success) {
-        setAuthToken(response.token);
-        toast.success(`Welcome back, ${response.data.user.name || response.data.user.organizationName}!`);
-        navigate(config.redirectPath);
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (response.success) {
+  //       setAuthToken(response.token);
+  //       toast.success(`Welcome back, ${response.data.user.name || response.data.user.organizationName}!`);
+  //       navigate(config.redirectPath);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || 'Login failed. Please try again.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
+  try {
+    const response = await config.loginFn(formData.email, formData.password);
+    
+    console.log('Login response:', response); // Add this
+    
+    if (response.success) {
+      // IMPORTANT: Save token AND role
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('role', role); // Make sure role is saved!
+      
+      // Set auth token for future requests
+      setAuthToken(response.token);
+      
+      toast.success(`Welcome back!`);
+      console.log('Redirecting to:', config.redirectPath); // Add this
+      navigate(config.redirectPath);
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    toast.error(error.response?.data?.message || 'Login failed. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Background Effects */}

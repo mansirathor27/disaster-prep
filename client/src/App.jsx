@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import RoleSelection from './pages/RoleSelection';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import OrganizationDashboard from './pages/OrganizationDashboard';
 
 function App() {
   return (
@@ -42,7 +43,8 @@ function App() {
           <Route path="/auth" element={<RoleSelection />} />
           <Route path="/auth/:role/login" element={<Login />} />
           <Route path="/auth/:role/signup" element={<Signup />} />
-          
+          {/* Dashboard Routes */}
+                    <Route path="/dashboard/organization" element={<OrganizationDashboard />} />
           {/* Dashboard Routes - Placeholder for now */}
           <Route path="/dashboard/:role" element={
             <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">

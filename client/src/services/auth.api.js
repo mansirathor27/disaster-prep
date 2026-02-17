@@ -19,9 +19,15 @@ export const registerOrganization = async (data) => {
   return response.data;
 };
 
+// In auth.api.js
 export const loginOrganization = async (email, password) => {
-  const response = await api.post('/auth/organization/login', { email, password });
-  return response.data;
+  try {
+    const response = await api.post('/auth/organization/login', { email, password });
+    console.log('Raw API response:', response); // Add this
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // Teacher Auth
