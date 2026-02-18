@@ -64,6 +64,7 @@ app.get('/health', (req, res) => {
 const authRoutes = require('./routes/auth.routes');
 // const dashboardRoutes = require('./routes/dashboard.routes');
 const organizationRoutes = require('./routes/organization.routes');
+const teacherRoutes = require('./routes/teacher.routes');
 // const locationRoutes = require('./routes/location.routes');
 // const disasterRoutes = require('./routes/disaster.routes');
 // const quizRoutes = require('./routes/quiz.routes');
@@ -74,7 +75,7 @@ const organizationRoutes = require('./routes/organization.routes');
 app.use(`${appConfig.server.apiPrefix}/auth`, authRoutes);
 // app.use(`${appConfig.server.apiPrefix}/dashboard`, dashboardRoutes);
 app.use(`${appConfig.server.apiPrefix}/organizations`, organizationRoutes);
-
+app.use(`${appConfig.server.apiPrefix}/teacher`, teacherRoutes);
 // // Existing Routes
 // app.use(`${appConfig.server.apiPrefix}/location`, locationRoutes);
 // app.use(`${appConfig.server.apiPrefix}/disasters`, disasterRoutes);
