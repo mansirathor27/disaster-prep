@@ -7,6 +7,7 @@ import RoleSelection from './pages/RoleSelection';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import OrganizationDashboard from './pages/OrganizationDashboard';
+import TeacherDashboard from './pages/TeacherDashboard'; // ✅ ADD THIS
 
 function App() {
   return (
@@ -43,9 +44,12 @@ function App() {
           <Route path="/auth" element={<RoleSelection />} />
           <Route path="/auth/:role/login" element={<Login />} />
           <Route path="/auth/:role/signup" element={<Signup />} />
+          
           {/* Dashboard Routes */}
-                    <Route path="/dashboard/organization" element={<OrganizationDashboard />} />
-          {/* Dashboard Routes - Placeholder for now */}
+          <Route path="/dashboard/organization" element={<OrganizationDashboard />} />
+          <Route path="/dashboard/teacher" element={<TeacherDashboard />} /> {/* ✅ ADD THIS */}
+          
+          {/* Placeholder for other dashboards */}
           <Route path="/dashboard/:role" element={
             <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
               <div className="text-center">
@@ -54,7 +58,6 @@ function App() {
               </div>
             </div>
           } />
-          
         </Routes>
       </div>
     </Router>
